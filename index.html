@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>逆水寒 · 菠萝岛 施肥妙算</title>
+<link rel="stylesheet" href="https://miaoda.feishu.cn/fonts/css2?family=Chakra+Petch:wght@400;500;600;700&family=Orbitron:wght@500;700&family=Noto+Sans+SC:wght@400;500;700;800&display=swap">
+<style>
+  :root {
+    --bg: #ffffff;
+    --bg-soft: #fafbfc;
+    --ink: #0b0f19;
+    --ink-2: #3a4457;
+    --muted: #8a94a6;
+    --line: #e8ecf2;
+    --line-2: #d5dbe6;
+    --cyan: #06b6d4;
+    --cyan-deep: #0e7490;
+    --cyan-soft: #ecfeff;
+    --pine: #f59e0b;
+    --apple: #ef4444;
+    --honey: #d97706;
+    --ok: #0d9488;
+    --danger: #dc2626;
+    --radius: 12px;
+    --shadow: 0 1px 2px rgba(16, 24, 40, .04), 0 8px 24px rgba(16, 24, 40, .05);
+    --font-num: "Chakra Petch", "Noto Sans SC", sans-serif;
+    --font-logo: "Orbitron", "Chakra Petch", sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 0 0 56px;
+    -webkit-font-smoothing: antialiased;
+  }
+  :focus-visible { outline: 2px solid var(--cyan); outline-offset: 2px; border-radius: 4px; }
+  ::selection { background: rgba(6, 182, 212, .18); }
+
+  /* 顶部信号线（签名元素之一） */
+  .signal-line {
+    height: 3px;
+    background: linear-gradient(90deg, var(--cyan-deep), var(--cyan) 40%, #67e8f9 70%, var(--cyan));
+    background-size: 200% 100%;
+    animation: signal 8s linear infinite;
+  }
+  @keyframes signal { 0% { background-position: 0% 0; } 100% { background-position: 200% 0; } }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+
+  /* ===== Hero ===== */
+  .hero {
+    position: relative; margin: 20px 0 22px;
+    border: 1px solid var(--line); border-radius: var(--radius);
+    overflow: hidden; background: #fff;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: url("https://aka.doubaocdn.com/s/1bBZzZ5eDF") no-repeat;
+    background-position: 78% center;
+    background-size: cover;
+  }
+  .hero-bg::after {
+    content: ""; position: absolute; inset: 0;
+    background: linear-gradient(90deg, rgba(255, 255, 255, .92) 0%, rgba(255, 255, 255, .78) 34%, rgba(255, 255, 255, 0) 66%);
+  }
+  .hero-inner { position: relative; padding: 44px 38px 36px; }
+  .kicker {
+    font-family: var(--font-logo); font-size: 11px; letter-spacing: .34em;
+    color: var(--cyan-deep); font-weight: 500; display: flex; align-items: center; gap: 10px;
+  }
+  .kicker::before { content: ""; width: 22px; height: 1px; background: var(--cyan); flex: none; }
+  .hero h1 {
+    font-size: clamp(30px, 4.6vw, 44px); font-weight: 800; letter-spacing: .02em;
+    color: var(--ink); margin: 12px 0 6px;
+  }
+  .hero h1 .dot { color: var(--cyan); }
+  .hero-sub { color: var(--muted); font-size: 13.5px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 16px; max-width: 640px; }
+  .tag {
+    background: #fff; border: 1px solid var(--line-2); border-radius: 4px;
+    padding: 3px 9px; font-size: 11px; color: var(--ink-2);
+    font-family: var(--font-num); letter-spacing: .02em;
+  }
+  .tag b { color: var(--cyan-deep); font-weight: 600; }
+
+  /* ===== 控制面板 ===== */
+  .panel {
+    display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px;
+    background: var(--bg-soft); border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 18px 20px; margin-bottom: 20px;
+  }
+  .panel .lbl { font-weight: 600; font-size: 13.5px; color: var(--ink-2); }
+  .ctrl { display: flex; align-items: center; gap: 10px; }
+
+  .toggle-row { display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none; }
+  .toggle-row .name { font-size: 14px; }
+  .toggle-row .name small { color: var(--muted); font-weight: 400; }
+  .switch {
+    position: relative; width: 42px; height: 23px; border-radius: 4px; flex: none;
+    background: #e3e8f0; transition: background .2s; border: 1px solid var(--line-2);
+  }
+  .switch::after {
+    content: ""; position: absolute; top: 2px; left: 2px; width: 17px; height: 17px;
+    background: #fff; box-shadow: 0 1px 2px rgba(16, 24, 40, .25);
+    transition: transform .2s;
+  }
+  input:checked + .switch { background: var(--cyan); border-color: var(--cyan); }
+  input:checked + .switch::after { transform: translateX(19px); }
+  .toggle-row input { position: absolute; opacity: 0; }
+  .hint { font-size: 11.5px; color: var(--muted); font-family: var(--font-num); }
+
+  .seg {
+    display: inline-flex; background: #fff; border: 1px solid var(--line-2);
+    border-radius: 6px; padding: 3px; gap: 2px;
+  }
+  .seg button {
+    border: none; background: transparent; padding: 6px 13px; border-radius: 4px;
+    font-size: 13px; cursor: pointer; color: var(--ink-2); transition: all .15s; min-height: 32px;
+  }
+  .seg button:hover { color: var(--cyan-deep); }
+  .seg button.active {
+    background: var(--ink); color: #fff; font-weight: 600;
+  }
+  .seg button.active.off { background: #eef1f6; color: var(--ink-2); font-weight: 600; }
+
+  .presets { display: flex; gap: 6px; flex-wrap: wrap; }
+  .preset {
+    border: 1px solid var(--line-2); background: #fff; border-radius: 4px;
+    padding: 6px 12px; font-size: 12px; cursor: pointer; color: var(--ink-2);
+    transition: all .15s; min-height: 32px; font-family: var(--font-num);
+  }
+  .preset:hover { border-color: var(--cyan); color: var(--cyan-deep); }
+  .preset.active { background: var(--cyan); border-color: var(--cyan); color: #fff; font-weight: 600; }
+
+  input[type="datetime-local"] {
+    font: inherit; color: var(--ink); padding: 6px 10px;
+    border: 1px solid var(--line-2); border-radius: 6px; background: #fff; outline: none;
+  }
+  input[type="datetime-local"]:focus { border-color: var(--cyan); box-shadow: 0 0 0 3px rgba(6, 182, 212, .15); }
+  input[type="datetime-local"]::-webkit-calendar-picker-indicator { cursor: pointer; }
+  .nowclock {
+    color: var(--cyan-deep); font-family: var(--font-num); font-weight: 600;
+    font-variant-numeric: tabular-nums; white-space: nowrap; font-size: 13px;
+  }
+
+  .summary { margin-left: auto; text-align: right; font-size: 12.5px; line-height: 1.9; color: var(--muted); }
+  .summary b { color: var(--ink-2); font-weight: 600; }
+  .summary .speed {
+    font-size: 22px; font-weight: 700; color: var(--cyan-deep);
+    font-family: var(--font-num); font-variant-numeric: tabular-nums;
+  }
+  .summary .speed.wk { color: var(--ok); }
+
+  /* ===== 成熟时间总览（三作物并排） ===== */
+  .overview {
+    background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 14px 18px 12px; margin-bottom: 16px;
+  }
+  .ov-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+  .ov-title {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 600; color: var(--muted); letter-spacing: .14em;
+  }
+  .ov-title svg { width: 13px; height: 13px; flex: none; }
+  .ov-head .badge { margin-left: auto; }
+  .ov-cols { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; }
+  .ov-col { display: flex; align-items: center; gap: 10px; padding: 4px 14px; min-width: 0; }
+  .ov-col:first-child { padding-left: 0; }
+  .ov-col:not(:first-child) { border-left: 1px dashed var(--line-2); }
+  .ov-fruit {
+    width: 40px; height: 40px; border-radius: 22%; flex: none;
+    display: flex; align-items: center; justify-content: center;
+    background: color-mix(in srgb, var(--fc) 13%, #fff);
+    border: 1px solid color-mix(in srgb, var(--fc) 24%, #fff);
+    box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, .95), inset 0 -1px 0 rgba(16, 24, 40, .05), 0 1px 2px rgba(16, 24, 40, .08);
+  }
+  .ov-fruit svg { width: 26px; height: 26px; }
+  .ov-meta { min-width: 0; }
+  .ov-name { font-size: 13px; font-weight: 600; color: var(--ink-2); }
+  .ov-time {
+    font-family: var(--font-num); font-size: 24px; font-weight: 700; color: var(--ink);
+    font-variant-numeric: tabular-nums; line-height: 1.2; white-space: nowrap;
+  }
+  .ov-sub { font-size: 11.5px; color: var(--muted); font-family: var(--font-num); margin-top: 1px; white-space: nowrap; }
+
+  /* ===== 植物卡片 ===== */
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .card {
+    position: relative; overflow: hidden;
+    background: #fff; border: 1px solid var(--line); border-radius: var(--radius);
+    padding: 20px; box-shadow: var(--shadow);
+  }
+  .card::before {
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--fc), transparent);
+    opacity: .9;
+  }
+  .card .wm {
+    position: absolute; right: -18px; top: -18px; width: 140px; height: 140px;
+    opacity: .05; pointer-events: none;
+  }
+  .card .wm svg { width: 100%; height: 100%; }
+  .card-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; position: relative; }
+  .fruit {
+    width: 50px; height: 50px; border-radius: 22%; flex: none;
+    display: flex; align-items: center; justify-content: center;
+    background: color-mix(in srgb, var(--fc) 13%, #fff);
+    border: 1px solid color-mix(in srgb, var(--fc) 24%, #fff);
+    box-shadow: inset 0 1.5px 0 rgba(255, 255, 255, .95), inset 0 -1px 0 rgba(16, 24, 40, .05), 0 1px 2px rgba(16, 24, 40, .08);
+  }
+  .fruit svg { width: 32px; height: 32px; }
+  .head-txt { min-width: 0; }
+  .card h2 { font-size: 18px; font-weight: 700; color: var(--ink); letter-spacing: .03em; }
+  .card .sub { color: var(--muted); font-size: 12.5px; margin-top: 2px; }
+  .mono-tag {
+    margin-left: auto; font-family: var(--font-logo); font-size: 10.5px;
+    letter-spacing: .18em; color: var(--muted); white-space: nowrap; border: 1px solid var(--line);
+    border-radius: 4px; padding: 3px 6px;
+  }
+
+  .zone { margin-top: 13px; border-top: 1px dashed var(--line-2); padding-top: 11px; position: relative; }
+  .zone-title {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 600; color: var(--muted); letter-spacing: .14em;
+  }
+  .zone-title svg { width: 14px; height: 14px; flex: none; }
+  .zone-title .badge { margin-left: auto; letter-spacing: .02em; }
+  .zone-title .tiny-t { margin-left: auto; font-size: 10.5px; font-weight: 400; color: var(--muted); letter-spacing: .02em; }
+
+  .badge {
+    border-radius: 4px; padding: 2px 8px; font-size: 11px; font-weight: 600;
+    background: #f1f4f9; color: var(--ink-2); white-space: nowrap; font-family: var(--font-num);
+  }
+  .badge.wk { background: #ecfdf5; color: var(--ok); }
+  .badge.gold { background: #fffbeb; color: #b45309; }
+  .badge.both { background: linear-gradient(90deg, #ecfdf5, #fffbeb); color: #b45309; }
+
+  .big {
+    font-family: var(--font-num); font-size: 34px; font-weight: 700; color: var(--ink);
+    font-variant-numeric: tabular-nums; letter-spacing: .01em; line-height: 1.2; margin-top: 8px;
+  }
+  .big .pct { font-size: 13.5px; color: var(--muted); font-weight: 500; margin-left: 8px; }
+  .big.sm { font-size: 21px; margin-top: 6px; }
+
+  /* 刻度尺进度（签名元素） */
+  .scale { margin: 10px 0 4px; }
+  .scale-head { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-bottom: 4px; font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+  .scale-head b { color: var(--ink-2); font-weight: 600; }
+  .scale-track {
+    position: relative; height: 10px; background: #f2f4f8;
+    border: 1px solid var(--line); border-radius: 3px; overflow: hidden;
+  }
+  .scale-track.mini { height: 7px; }
+  .scale-fill {
+    display: block; height: 100%; width: 0;
+    background: linear-gradient(90deg, #67e8f9, var(--cyan));
+    position: relative; transition: width .5s cubic-bezier(.3, .9, .3, 1);
+  }
+  .scale-fill.half { background: linear-gradient(90deg, #fde68a, var(--pine)); }
+  .scale-fill.dim { opacity: .3; }
+  .scale-fill::after {
+    content: ""; position: absolute; right: 0; top: -1px; bottom: -1px; width: 2px;
+    background: var(--cyan-deep);
+  }
+  .scale-fill.half::after { background: #b45309; }
+  .scale-ticks {
+    position: absolute; inset: 0; pointer-events: none;
+    background: repeating-linear-gradient(90deg, transparent 0 9.8%, rgba(255, 255, 255, .9) 9.8% 10%);
+  }
+
+  .calc-line { font-size: 11.5px; color: var(--muted); font-family: var(--font-num); font-variant-numeric: tabular-nums; margin-top: 6px; letter-spacing: .02em; }
+  .save-tag {
+    display: inline-block; margin-top: 9px; border-radius: 4px; padding: 4px 10px;
+    font-size: 12px; font-weight: 600; background: var(--cyan-soft); color: var(--cyan-deep);
+    font-family: var(--font-num); border: 1px solid rgba(6, 182, 212, .35);
+  }
+
+  .sched-row { display: flex; align-items: baseline; gap: 8px; font-size: 13.5px; line-height: 2.15; color: var(--ink-2); }
+  .sched-row .ic { color: var(--muted); display: inline-flex; align-items: center; flex: none; }
+  .sched-row .ic svg { width: 14px; height: 14px; }
+  .sched-row b { color: var(--ink); font-weight: 600; font-family: var(--font-num); font-variant-numeric: tabular-nums; }
+  .sched-row .tiny { color: var(--muted); font-size: 11px; margin-left: auto; white-space: nowrap; font-family: var(--font-num); }
+  .sched-row .warn { color: var(--danger); font-weight: 600; }
+
+  .note { font-size: 12px; line-height: 1.7; margin-top: 8px; padding: 8px 11px; border-radius: 6px; border: 1px solid; }
+  .note.bad { background: #fef2f2; border-color: #fecaca; color: #b91c1c; }
+  .note.good { background: #f0fdf4; border-color: #bbf7d0; color: #15803d; }
+  .note.tip { background: #fffbeb; border-color: #fde68a; color: #b45309; }
+  .note b { font-variant-numeric: tabular-nums; }
+
+  .schedule.back {
+    background: var(--cyan-soft); border: 1px solid rgba(6, 182, 212, .3); border-radius: 8px;
+    padding: 11px 13px 9px; margin-top: 13px;
+  }
+  .schedule.back .zone-title { color: var(--cyan-deep); }
+
+  .saves { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 13px; }
+  .chip { border-radius: 4px; padding: 4px 9px; font-size: 12px; font-weight: 600; border: 1px solid; font-family: var(--font-num); }
+  .chip.gray { background: #f8fafc; border-color: var(--line-2); color: var(--ink-2); font-weight: 500; }
+  .chip.gold { background: #fffbeb; border-color: #fde68a; color: #b45309; }
+  .chip.wk { background: #ecfdf5; border-color: #a7f3d0; color: var(--ok); }
+  .chip.bad { background: #fef2f2; border-color: #fecaca; color: #b91c1c; }
+
+  footer.notes {
+    margin: 28px auto 0; text-align: center;
+    color: var(--muted); font-size: 11px; line-height: 2;
+    border-top: 1px solid var(--line); padding-top: 18px;
+    font-family: var(--font-num); letter-spacing: .02em;
+  }
+  footer.notes b { color: var(--ink-2); font-variant-numeric: tabular-nums; }
+
+  /* ===== 三卡并排；窄屏收窄为单列 ===== */
+  @media (max-width: 960px) {
+    .grid { grid-template-columns: 1fr; }
+  }
+
+  /* ===== 手机适配 ===== */
+  @media (max-width: 760px) {
+    body { padding: 0 0 44px; -webkit-tap-highlight-color: transparent; }
+    .wrap { padding: 0 10px; }
+    .hero { margin-top: 12px; }
+    .hero-bg { background-position: 62% center; }
+    .hero-inner { padding: 30px 18px 26px; }
+    .kicker { font-size: 9.5px; letter-spacing: .24em; }
+    .hero h1 { font-size: 27px; }
+    .hero-sub { font-size: 12px; }
+    .tag { padding: 3px 8px; font-size: 10px; }
+
+    .panel { flex-direction: column; align-items: stretch; gap: 12px; padding: 14px; }
+    .ctrl { flex-wrap: wrap; }
+    .toggle-row { width: 100%; }
+    .toggle-row .name { flex: 1; font-size: 14px; }
+    .seg { width: 100%; justify-content: space-between; }
+    .seg button { flex: 1; text-align: center; padding: 8px 4px; font-size: 13px; min-height: 40px; }
+    .presets { width: 100%; justify-content: center; }
+    .preset { padding: 7px 12px; min-height: 38px; }
+
+    .ctrl.plant { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+    .ctrl.plant .lbl { width: 100%; }
+    .ctrl.plant .hint { flex-basis: 100%; margin-left: 0; }
+    .ctrl.plant input[type="datetime-local"] { flex: 1 1 190px; min-width: 0; max-width: 100%; }
+    .ctrl.plant .preset { flex: none; }
+    .ctrl.plant .nowclock { margin-left: auto; }
+
+    .summary { margin-left: 0; text-align: left; width: 100%; border-top: 1px dashed var(--line-2); padding-top: 10px; }
+
+    .ov-cols { grid-template-columns: 1fr; gap: 8px; }
+    .ov-col { padding: 8px 0 !important; border-left: none !important; border-top: 1px dashed var(--line-2); }
+    .ov-col:first-child { border-top: none; padding-top: 0; }
+    .ov-time { font-size: 20px; }
+
+    .grid { grid-template-columns: 1fr; gap: 14px; }
+    .card { padding: 16px 14px; }
+    .big { font-size: 30px; }
+    .big.sm { font-size: 20px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div class="signal-line" aria-hidden="true"></div>
+<div class="wrap">
+
+  <header class="hero">
+    <div class="hero-bg" role="presentation"></div>
+    <div class="hero-inner">
+      <div class="kicker">JUSTICE ONLINE · FARM CONSOLE</div>
+      <h1>菠萝岛<span class="dot"> · </span>施肥妙算</h1>
+      <p class="hero-sub">逆水寒 · 庄园作物助手 ｜ 周末加成 / 肥料增速 / 半熟倒计时 / 反推种植</p>
+      <div class="tags">
+        <span class="tag">平时 <b>÷1.00</b></span>
+        <span class="tag">周末 +5% <b>÷1.05</b></span>
+        <span class="tag">肥料 10/30/50% <b>÷1.10/1.30/1.50</b></span>
+        <span class="tag">周末+肥料30% <b>÷1.35</b>（实测 15分→11:06、60分→44:26、16h→11:51）</span>
+        <span class="tag">半熟 = 成熟前 <b>3分 / 5分 / 10分</b> 进入，剩余同样 ÷(1+加成)</span>
+        <span class="tag">周末窗口 = <b>周五 00:00 ~ 周一 00:00</b>，按<b>种下时刻</b>判定</span>
+      </div>
+    </div>
+  </header>
+
+  <section class="panel" aria-label="方案设置">
+    <div class="ctrl">
+      <label class="toggle-row">
+        <input type="checkbox" id="chkWeekend" checked>
+        <span class="switch"></span>
+        <span class="name">周末加成 <small>+5%</small></span>
+      </label>
+      <span class="hint" id="loadHint"></span>
+    </div>
+
+    <div class="ctrl">
+      <span class="lbl">施肥：</span>
+      <div class="seg" id="segFert" role="group" aria-label="肥料档位">
+        <button type="button" data-ft="0" class="active off">不施肥</button>
+        <button type="button" data-ft="0.10">+10%</button>
+        <button type="button" data-ft="0.30">+30%</button>
+        <button type="button" data-ft="0.50">+50%</button>
+      </div>
+    </div>
+
+    <div class="presets" id="presets">
+      <button type="button" class="preset" data-wk="0" data-ft="0">平时</button>
+      <button type="button" class="preset" data-wk="0" data-ft="0.30">仅肥料+30%</button>
+      <button type="button" class="preset" data-wk="1" data-ft="0">仅周末</button>
+      <button type="button" class="preset" data-wk="1" data-ft="0.10">周末+10%</button>
+      <button type="button" class="preset" data-wk="1" data-ft="0.30">周末+30%</button>
+      <button type="button" class="preset" data-wk="1" data-ft="0.50">周末+50%</button>
+    </div>
+
+    <div class="ctrl plant">
+      <span class="lbl">种植时间：</span>
+      <input type="datetime-local" id="plantTime" step="1" aria-label="种植时间">
+      <button type="button" class="preset" id="btnNow">当前时间</button>
+      <span class="lbl nowclock" id="nowClock"></span>
+    </div>
+
+    <div class="ctrl plant">
+      <span class="lbl">反推种植 · 目标半熟时刻：</span>
+      <input type="datetime-local" id="targetHalf" step="1" aria-label="目标半熟时刻">
+      <button type="button" class="preset" id="btnTargetNow">设为现在</button>
+      <button type="button" class="preset" id="btnTargetClear">清除</button>
+      <span class="hint">设定后每张卡反推种下时刻；能吃到周末 +5% 会自动计入，吃不到会提示</span>
+    </div>
+
+    <div class="summary" id="summary" aria-live="polite"></div>
+  </section>
+
+  <section class="overview" aria-label="成熟时间总览">
+    <div class="ov-head">
+      <div class="ov-title" id="ovTitle"></div>
+      <span class="badge" id="ovBadge"></span>
+    </div>
+    <div class="ov-cols" id="ovCols"></div>
+  </section>
+
+  <main class="grid" id="grid"></main>
+
+  <footer class="notes">
+    实测吻合（成熟）：15分 → 周末 14:18、周末+30% 11:06；60分 → 57:09、44:26；16h → 15:14、11:51。<br>
+    实测吻合（半熟=成熟前倒计时剩余，无/10%/30%/50%）：15分 → 3:00 / 2:43 / 2:18 / 2:00；60分 → 5:00 / 4:33 / 3:51 / 3:20；16h → 10:00 / 9:05 / ≈7:41 / 6:40。<br>
+    半熟基础（成熟前）3分/5分/10分，与总时长同规则：剩余 = 基础 ÷ (1 + 周末5% + 肥料10/30/50%)；半熟时刻 = 成熟时刻 − 半熟剩余。倒计时按整秒显示，可能有 ±1~2 秒差。施肥只需 2 秒施放，收益远超成本。<br>
+    <b>周末判定</b>：周末窗口 = 周五 00:00 ~ 周一 00:00（本地时间），只看「种下」那一刻在不在窗口内。反推时自动判断并计入周末 +5%——同一个目标时刻，时长越长越容易"够不着周末"：例如目标周五 10:00 半熟，15分/60分植物可在周五当天种下、吃得到 +5%，而 16 小时植物要周四就种下，自动按无周末加成重算并提示「吃不到周末加成」。<br>
+    <b>默认加成</b>：周五 / 周六 / 周日打开本页默认「仅周末」；周一 ~ 周四打开默认关闭周末加成（肥料仍默认 +30%），随时可手动改。
+  </footer>
+</div>
+
+<script>
+  /* ===== 数据：三种植物（秒）；half = 无加成时的"半熟倒计时" ===== */
+  var PLANTS = [
+    { name: "短熟", base: 15 * 60,   half: 3 * 60,    icon: "pineapple", color: "#f59e0b" },
+    { name: "中熟", base: 60 * 60,   half: 5 * 60,    icon: "apple",     color: "#ef4444" },
+    { name: "长熟", base: 960 * 60,  half: 10 * 60,   icon: "jar",       color: "#d97706" }
+  ];
+  var WEEKEND = 0.05;
+
+  /* ===== 水果图案（自绘 SVG）+ 功能区线形图标 ===== */
+  var S = {
+    pineapple: '<svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 19.5c-3.7-4.2-8.4-6.8-14.2-8.3 1.6 5.8 4.7 10.3 9.7 12.6z" fill="#4ade80"/><path d="M32 19.5c3.7-4.2 8.4-6.8 14.2-8.3-1.6 5.8-4.7 10.3-9.7 12.6z" fill="#4ade80"/><path d="M32 19.5c-.4-6.1 1-11 4.2-15.6 1.7 5.3 2 10.3 1 15z" fill="#22c55e"/><path d="M32 19.5c.4-6.1-1-11-4.2-15.6-1.7 5.3-2 10.3-1 15z" fill="#16a34a"/><rect x="13.5" y="21" width="37" height="34" rx="10" fill="#fbbf24"/><path d="M22 21v34M32 21v34M42 21v34M13.5 28.5h37M13.5 36.5h37M13.5 44.5h37" stroke="#f59e0b" stroke-width="3"/></svg>',
+    apple: '<svg viewBox="0 0 64 64" aria-hidden="true"><circle cx="32" cy="38" r="17" fill="#ef4444"/><circle cx="24.5" cy="30.5" r="3.6" fill="#fca5a5"/><path d="M32 21c-2.6-5-6.2-8.1-10.8-9.7" stroke="#92400e" stroke-width="4" stroke-linecap="round" fill="none"/><ellipse cx="20.5" cy="11" rx="7" ry="3.3" transform="rotate(-24 20.5 11)" fill="#22c55e"/></svg>',
+    jar: '<svg viewBox="0 0 64 64" aria-hidden="true"><rect x="19" y="10" width="26" height="9" rx="2.5" fill="#b45309"/><path d="M17.5 21h29l2.2 26a4.8 4.8 0 0 1-4.8 5.4H20.1a4.8 4.8 0 0 1-4.8-5.4l2.2-26z" fill="#f59e0b"/><path d="M32 26.5l7 4v4.5H25v-4.5z" fill="#fde68a"/><path d="M25 35h14v2l-7 4.5-7-4.5z" fill="#fbbf24"/></svg>',
+    sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M18.5 5.5l-1.7 1.7M7.2 16.8l-1.7 1.7"/></svg>',
+    moon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 14.6A8.5 8.5 0 1 1 9.4 4 7 7 0 0 0 20 14.6z"/></svg>',
+    clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><path d="M12 7.4V12l3.2 2"/></svg>',
+    sprout: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21v-7.5"/><path d="M12 13.5c0-3.4-2.8-4.9-6-4.4.2 3.4 2.6 5.4 6 4.4z"/><path d="M12 11c0-2.8 2.2-4.2 5-3.8-.2 2.8-2 4.4-5 3.8z"/></svg>',
+    grid: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.2" y="3.2" width="7.4" height="7.4" rx="1.2"/><rect x="13.4" y="3.2" width="7.4" height="7.4" rx="1.2"/><rect x="3.2" y="13.4" width="7.4" height="7.4" rx="1.2"/><rect x="13.4" y="13.4" width="7.4" height="7.4" rx="1.2"/></svg>',
+    target: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.6"/><circle cx="12" cy="12" r="4.8"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></svg>'
+  };
+
+  /* ===== 周末窗口：周五 00:00 ~ 周一 00:00（本地时间），只看种下时刻 ===== */
+  var DAY_NAMES = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
+  function isWeekendMoment(d) { var w = d.getDay(); return w === 5 || w === 6 || w === 0; }
+  function nextWeekendStart(d) {
+    var w = d.getDay();
+    if (w === 5 || w === 6 || w === 0) return null;
+    var n = new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    n.setDate(n.getDate() + (w === 1 ? 4 : w === 2 ? 3 : w === 3 ? 2 : 1));
+    return n;
+  }
+  function bonusText(wkOn, ft) {
+    var parts = [];
+    if (wkOn) parts.push("周末 +5%");
+    if (ft > 0) parts.push("肥料 +" + (ft * 100).toFixed(0) + "%");
+    return parts.length ? parts.join(" ＋ ") : "无加成";
+  }
+  function bonusClass(wkOn, ft) {
+    if (wkOn && ft > 0) return "both";
+    if (ft > 0) return "gold";
+    if (wkOn) return "wk";
+    return "";
+  }
+
+  var chkWeekend = document.getElementById("chkWeekend");
+  var segFert    = document.getElementById("segFert");
+  var gridEl     = document.getElementById("grid");
+  var summaryEl  = document.getElementById("summary");
+  var loadHint   = document.getElementById("loadHint");
+  var presets    = document.querySelectorAll("#presets .preset");
+  var fertBtns   = segFert.querySelectorAll("button");
+  var ovTitle    = document.getElementById("ovTitle");
+  var ovBadge    = document.getElementById("ovBadge");
+  var ovCols     = document.getElementById("ovCols");
+
+  var fertLevel = 0.30;
+
+  /* ===== 种植时间 ===== */
+  var plantTime = document.getElementById("plantTime");
+  var btnNow    = document.getElementById("btnNow");
+  var nowClock  = document.getElementById("nowClock");
+  function pad2(n) { return String(n).padStart(2, "0"); }
+  function sameDay(a, b) {
+    return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate();
+  }
+  function toLocalInput(d) {
+    return d.getFullYear() + "-" + pad2(d.getMonth() + 1) + "-" + pad2(d.getDate()) +
+           "T" + pad2(d.getHours()) + ":" + pad2(d.getMinutes()) + ":" + pad2(d.getSeconds());
+  }
+  function startTime() {
+    if (plantTime.value) { var d = new Date(plantTime.value); if (!isNaN(d)) return d; }
+    return new Date();
+  }
+  function fmtClock(d) {
+    var now = new Date();
+    var hm = pad2(d.getHours()) + ":" + pad2(d.getMinutes()) + ":" + pad2(d.getSeconds());
+    if (sameDay(d, now)) return "今天 " + hm;
+    if (sameDay(d, new Date(now.getTime() + 86400000))) return "明天 " + hm;
+    return (d.getMonth() + 1) + "月" + d.getDate() + "日 " + hm;
+  }
+  function fmtClockFull(d) {
+    var now = new Date();
+    var hm = pad2(d.getHours()) + ":" + pad2(d.getMinutes());
+    var wd = DAY_NAMES[d.getDay()];
+    if (sameDay(d, now)) return "今天(" + wd + ") " + hm;
+    if (sameDay(d, new Date(now.getTime() + 86400000))) return "明天(" + wd + ") " + hm;
+    return (d.getMonth() + 1) + "/" + d.getDate() + "(" + wd + ") " + hm;
+  }
+  function fmtShort(sec) {
+    sec = Math.max(0, Math.floor(sec));
+    var d = Math.floor(sec / 86400); sec -= d * 86400;
+    var h = Math.floor(sec / 3600);  sec -= h * 3600;
+    var m = Math.floor(sec / 60);    var s = sec - m * 60;
+    if (d) return d + "天" + h + "小时";
+    if (h) return h + "小时" + m + "分";
+    if (m) return m + "分" + pad2(s) + "秒";
+    return sec + "秒";
+  }
+  btnNow.addEventListener("click", function () { plantTime.value = toLocalInput(new Date()); render(); });
+  plantTime.addEventListener("change", render);
+  setInterval(function () {
+    var n = new Date();
+    nowClock.textContent = "现在 " + pad2(n.getHours()) + ":" + pad2(n.getMinutes()) + ":" + pad2(n.getSeconds());
+  }, 1000);
+
+  /* ===== 反推种植 ===== */
+  var targetHalf    = document.getElementById("targetHalf");
+  var btnTargetNow   = document.getElementById("btnTargetNow");
+  var btnTargetClear = document.getElementById("btnTargetClear");
+  function targetTime() {
+    if (targetHalf.value) { var d = new Date(targetHalf.value); if (!isNaN(d)) return d; }
+    return null;
+  }
+  btnTargetNow.addEventListener("click", function () { targetHalf.value = toLocalInput(new Date()); render(); });
+  btnTargetClear.addEventListener("click", function () { targetHalf.value = ""; render(); });
+  targetHalf.addEventListener("change", render);
+
+  /* ===== 刻度尺 ===== */
+  function scaleHTML(label, val, pct, colorCls, mini) {
+    var p = Math.min(100, Math.max(2, pct));
+    var fill = colorCls === "ghost"
+      ? ""
+      : '<span class="scale-fill ' + colorCls + '" style="width:' + p + '%"></span>';
+    return '<div class="scale">' +
+      '<div class="scale-head"><span>' + label + ' <b>' + val + '</b></span><span>' + pct.toFixed(1) + '%</span></div>' +
+      '<div class="scale-track' + (mini ? " mini" : "") + '">' + fill + '<span class="scale-ticks"></span></div>' +
+    '</div>';
+  }
+
+  /* ===== 渲染 ===== */
+  function render() {
+    var wk = chkWeekend.checked;
+    var ft = fertLevel;
+    var bonus = (wk ? WEEKEND : 0) + ft;
+    var speed = 1 + bonus;
+
+    /* 摘要 */
+    var parts = [];
+    if (wk) parts.push("周末 +5%");
+    if (ft > 0) parts.push("肥料 +" + (ft * 100).toFixed(0) + "%");
+    var desc = parts.length ? parts.join(" ＋ ") : "无加成";
+    var cls = ft > 0 ? "" : (wk ? "wk" : "");
+    summaryEl.innerHTML =
+      '<div>当前：<b>' + desc + '</b> ｜ 总速度 = 原速 × <span class="speed ' + cls + '">' + (speed * 100).toFixed(0) + '%</span></div>' +
+      '<div>时间 = 原时长 ÷ ' + speed.toFixed(2) + ' ｜ 约剩 <b>' + (100 / speed).toFixed(2) + '%</b>，共省 <b>' + (100 - 100 / speed).toFixed(1) + '%</b></div>';
+
+    /* 按钮高亮 */
+    fertBtns.forEach(function (b) {
+      b.classList.toggle("active", +b.dataset.ft === ft);
+      b.classList.toggle("off", +b.dataset.ft === 0);
+    });
+    presets.forEach(function (p) {
+      p.classList.toggle("active", (+p.dataset.wk === (wk ? 1 : 0)) && (+p.dataset.ft === ft));
+    });
+
+    /* 种植时刻 + 周末是否真的生效 */
+    var start = startTime();
+    var startInWk = isWeekendMoment(start);
+    var fwdWkOn = wk && startInWk;
+    var fwdSpeed = 1 + (fwdWkOn ? WEEKEND : 0) + ft;
+    var tgt = targetTime();
+
+    /* 总览：三作物成熟时间并排 */
+    ovTitle.innerHTML = S.grid + '成熟时间总览';
+    ovBadge.className = 'badge ' + bonusClass(wk, ft);
+    ovBadge.textContent = bonusText(wk, ft);
+    ovCols.innerHTML = PLANTS.map(function (p) {
+      var result = p.base / speed;
+      var halfResult = p.half / speed;
+      var pct = Math.max(2, result / p.base * 100);
+      return '<div class="ov-col" style="--fc:' + p.color + '">' +
+        '<span class="ov-fruit">' + S[p.icon] + '</span>' +
+        '<div class="ov-meta">' +
+          '<div class="ov-name">' + p.name + '</div>' +
+          '<div class="ov-time">' + fmtShort(result) + '</div>' +
+          '<div class="ov-sub">半熟 ' + fmtShort(halfResult) + ' · 剩 ' + pct.toFixed(1) + '%</div>' +
+        '</div>' +
+      '</div>';
+    }).join("");
+
+    /* 卡片 */
+    gridEl.innerHTML = PLANTS.map(function (p, idx) {
+      var B = p.base;
+      var HB = p.half;
+      var result = B / speed;
+      var halfResult = HB / speed;
+      var barPct = Math.max(2, result / B * 100);
+      var halfPct = Math.max(2, halfResult / HB * 100);
+
+      var fwdResult = B / fwdSpeed;
+      var fwdHalfResult = HB / fwdSpeed;
+      var fwdHalf = new Date(start.getTime() + Math.floor(fwdResult - fwdHalfResult) * 1000);
+      var fwdFull = new Date(start.getTime() + Math.floor(fwdResult) * 1000);
+
+      var fwdNote = "";
+      if (wk && !startInWk) {
+        var nx = nextWeekendStart(start);
+        fwdNote = '<div class="note bad">种下时刻 <b>' + fmtClockFull(start) + '</b> 不在周末内，周末 +5% 不会生效，' +
+          '下表已按「' + bonusText(false, ft) + '」重算。' +
+          (nx ? '要吃到周末加成，请把种下时间放到 <b>' + fmtClockFull(nx) + '</b> 之后。' : '') + '</div>';
+      } else if (fwdWkOn) {
+        fwdNote = '<div class="note good">种下时刻在周末内，周末 +5% 已生效。</div>';
+      } else if (!wk && startInWk) {
+        var better = B / (1 + WEEKEND + ft);
+        fwdNote = '<div class="note tip">种下时刻在周末内，勾选「周末加成」可再省 ' + fmtShort(fwdResult - better) +
+          '，成熟提前到 <b>' + fmtClock(new Date(start.getTime() + Math.floor(better) * 1000)) + '</b>。</div>';
+      }
+
+      /* 反推种植 */
+      var backHtml = "";
+      if (tgt) {
+        var tgtInWk = isWeekendMoment(tgt);
+        var pWk = new Date(tgt.getTime() - Math.floor((B - HB) / (1 + WEEKEND + ft)) * 1000);
+        var pNo = new Date(tgt.getTime() - Math.floor((B - HB) / (1 + ft)) * 1000);
+        var backWkOn, plantBack;
+        if (isWeekendMoment(pWk)) {
+          backWkOn = true;  plantBack = pWk;
+        } else if (!isWeekendMoment(pNo)) {
+          backWkOn = false; plantBack = pNo;
+        } else {
+          backWkOn = true;
+          plantBack = new Date(new Date(pWk.getFullYear(), pWk.getMonth(), pWk.getDate()).getTime() - 1000);
+        }
+        var backSpeed = 1 + (backWkOn ? WEEKEND : 0) + ft;
+        var mature = new Date(tgt.getTime() + Math.floor(HB / backSpeed) * 1000);
+        var backNote = backWkOn
+          ? '<div class="note good">已自动计入周末 +5%。</div>'
+          : '<div class="note bad">' + p.name + ' ' + fmtShort(B) + ' 吃不到周末加成</div>';
+        var warn = plantBack.getTime() < Date.now() - 1500
+          ? '<span class="warn">请不要在这个时间之前种下</span>'
+          : '请在这个时间之后种下';
+
+        backHtml =
+          '<section class="schedule back">' +
+            '<div class="zone-title">' + S.target + '反推种植 · ' + fmtClock(tgt) + ' 进入半熟' +
+              '<span class="badge ' + bonusClass(backWkOn, ft) + '">' + bonusText(backWkOn, ft) + ' ×' + backSpeed.toFixed(2) + '</span></div>' +
+            '<div class="sched-row"><span class="ic">' + S.sprout + '</span>开始种<b>' + fmtClock(plantBack) + '</b><span class="tiny">' + warn + '</span></div>' +
+            '<div class="sched-row"><span class="ic">' + S.sun + '</span>届时<b>' + fmtClock(mature) + '</b>成熟<span class="tiny">目标半熟后 ' + fmtShort((mature - tgt) / 1000) + '</span></div>' +
+            '<div class="sched-row"><span class="tiny" style="margin-left:0">目标时刻 ' + (tgtInWk ? '在周末内' : '不在周末内') + '（' + DAY_NAMES[tgt.getDay()] + '）｜ 周末加成按种下时刻自动判断</span></div>' +
+            backNote +
+          '</section>';
+      }
+
+      /* 省时提示 */
+      var liveSpeed = fwdSpeed;
+      var liveResult = B / liveSpeed;
+      var liveHalf = HB / liveSpeed;
+      var onlyWeekend = B / (1 + WEEKEND);
+      var chips = '<span class="chip gray">原时长 ' + fmtShort(B) + '</span>';
+      if (liveSpeed > 1) {
+        chips += '<span class="chip gold">收获省 ' + fmtShort(B - liveResult) + '</span>';
+        if (HB - liveHalf > 0.5) {
+          chips += '<span class="chip wk">半熟提前 ' + fmtShort(HB - liveHalf) + '</span>';
+        }
+      }
+      if (fwdWkOn && ft > 0) {
+        chips += '<span class="chip gold">比仅周末再省 ' + fmtShort(onlyWeekend - liveResult) + '</span>';
+      }
+      if (wk && !startInWk) {
+        chips += '<span class="chip bad">周末 +5% 实际不生效</span>';
+      }
+
+      var tagNo = String(idx + 1).padStart(2, "0");
+
+      return (
+      '<article class="card" style="--fc:' + p.color + '">' +
+        '<div class="wm">' + S[p.icon] + '</div>' +
+        '<header class="card-head">' +
+          '<span class="fruit">' + S[p.icon] + '</span>' +
+          '<div class="head-txt"><h2>' + p.name + '</h2>' +
+          '<div class="sub">总时长 ' + fmtShort(B) + ' ｜ 半熟：成熟前 ' + fmtShort(HB) + ' 进入（无加成）</div></div>' +
+          '<span class="mono-tag">CROP ' + tagNo + '</span>' +
+        '</header>' +
+
+        '<section class="zone">' +
+          '<div class="zone-title">' + S.sun + '成熟收获<span class="badge ' + bonusClass(wk, ft) + '">' + bonusText(wk, ft) + '</span></div>' +
+          '<div class="big">' + fmtShort(result) + '<span class="pct">剩 ' + barPct.toFixed(1) + '%</span></div>' +
+          scaleHTML('平时', fmtShort(B), 100, 'ghost') +
+          scaleHTML('当前方案', fmtShort(result), barPct, bonus === 0 ? 'dim' : '') +
+          '<div class="calc-line">' + B.toLocaleString() + ' 秒 ÷ ' + speed.toFixed(2) + ' = ' + result.toFixed(1) + ' 秒</div>' +
+          (liveSpeed > 1 ? '<div class="save-tag">收获省 ' + fmtShort(B - liveResult) + '</div>' : '') +
+        '</section>' +
+
+        '<section class="zone">' +
+          '<div class="zone-title">' + S.moon + '半熟倒计时<span class="tiny-t">成熟前剩余</span></div>' +
+          '<div class="big sm">' + fmtShort(halfResult) + '<span class="pct">剩 ' + halfPct.toFixed(1) + '%</span></div>' +
+          scaleHTML('平时剩余', fmtShort(HB), 100, 'ghost', true) +
+          scaleHTML('当前剩余', fmtShort(halfResult), halfPct, 'half' + (bonus === 0 ? ' dim' : ''), true) +
+          '<div class="calc-line">半熟剩余：' + HB.toLocaleString() + ' 秒 ÷ ' + speed.toFixed(2) + ' = ' + halfResult.toFixed(1) + ' 秒</div>' +
+        '</section>' +
+
+        '<section class="zone">' +
+          '<div class="zone-title">' + S.clock + '种植时间预估<span class="badge ' + bonusClass(fwdWkOn, ft) + '">' + bonusText(fwdWkOn, ft) + ' ×' + fwdSpeed.toFixed(2) + '</span></div>' +
+          '<div class="sched-row"><span class="ic">' + S.sprout + '</span>种下<b>' + fmtClock(start) + '</b></div>' +
+          '<div class="sched-row"><span class="ic">' + S.moon + '</span>进入半熟<b>' + fmtClock(fwdHalf) + '</b><span class="tiny">' + fmtShort(fwdResult - fwdHalfResult) + ' 后</span></div>' +
+          '<div class="sched-row"><span class="ic">' + S.sun + '</span>成熟收获<b>' + fmtClock(fwdFull) + '</b><span class="tiny">' + fmtShort(fwdResult) + ' 后</span></div>' +
+          fwdNote +
+        '</section>' +
+
+        backHtml +
+
+        '<footer class="saves">' + chips + '</footer>' +
+      '</article>');
+    }).join("");
+  }
+
+  chkWeekend.addEventListener("change", render);
+  fertBtns.forEach(function (b) {
+    b.addEventListener("click", function () { fertLevel = +b.dataset.ft; render(); });
+  });
+  presets.forEach(function (p) {
+    p.addEventListener("click", function () {
+      chkWeekend.checked = p.dataset.wk === "1";
+      fertLevel = +p.dataset.ft;
+      render();
+    });
+  });
+
+  /* ===== 按打开当天决定默认加成 ===== */
+  var openDate = new Date();
+  var openInWk = isWeekendMoment(openDate);
+  if (openInWk) { chkWeekend.checked = true;  fertLevel = 0;    }
+  else          { chkWeekend.checked = false; fertLevel = 0.30; }
+  loadHint.textContent = '今天' + DAY_NAMES[openDate.getDay()] + ' · 默认「' + (openInWk ? "仅周末" : "仅肥料+30%") + '」';
+  loadHint.title = "周五~周日打开默认勾选周末加成；周一~周四打开默认不勾（肥料仍 +30%）。";
+
+  plantTime.value = toLocalInput(new Date());
+  render();
+</script>
+</body>
+</html>
