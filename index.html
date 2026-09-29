@@ -381,7 +381,7 @@
         <span class="tag">周末+肥料30% <b>÷1.35</b>（实测 15分→11:06、60分→44:26、16h→11:51）</span>
         <span class="tag">新作物 桃子 <b>6小时</b>（农场8级解锁）</span>
         <span class="tag">半熟 = 成熟前 <b>3分 / 5分 / 10分</b> 进入（短熟/中熟/桃子·长熟），剩余同样 ÷(1+加成)</span>
-        <span class="tag">周末窗口 = <b>周五 00:00 ~ 周一 00:00</b> ＋ <b>国庆假期 10/1~10/7</b>，按<b>种下时刻</b>判定</span>
+        <span class="tag">周末窗口 = <b>周五 00:00 ~ 周一 00:00</b>（按种下时刻）＋ <b>国庆假期 10/1~10/7</b>（反推按目标时刻直接计入 +5%）</span>
       </div>
     </div>
   </header>
@@ -427,7 +427,7 @@
       <input type="datetime-local" id="targetHalf" step="1" aria-label="目标半熟时刻">
       <button type="button" class="preset" id="btnTargetNow">设为现在</button>
       <button type="button" class="preset" id="btnTargetClear">清除</button>
-      <span class="hint">设定后每张卡反推种下时刻；能吃到周末 +5% 会自动计入，吃不到会提示</span>
+      <span class="hint">设定后每张卡反推种下时刻；国庆假期内目标直接计入 +5%，平时能吃到会自动计入，吃不到会提示</span>
     </div>
 
     <div class="summary" id="summary" aria-live="polite"></div>
@@ -448,7 +448,7 @@
     实测吻合（半熟=成熟前倒计时剩余，无/10%/30%/50%）：15分 → 3:00 / 2:43 / 2:18 / 2:00；60分 → 5:00 / 4:33 / 3:51 / 3:20；16h → 10:00 / 9:05 / ≈7:41 / 6:40。<br>
     半熟基础（成熟前）3分/5分/10分（短熟/中熟/桃子·长熟），与总时长同规则：剩余 = 基础 ÷ (1 + 周末5% + 肥料10/30/50%)；半熟时刻 = 成熟时刻 − 半熟剩余。倒计时按整秒显示，可能有 ±1~2 秒差。施肥只需 2 秒施放，收益远超成本。<br>
     <b>桃子（6小时新作物）</b>：总时长与计算方式与其余作物完全一致，半熟 = 成熟前 10 分进入（玩家实测确认）。<br>
-    <b>周末判定</b>：周末窗口 = 周五 00:00 ~ 周一 00:00 ＋ 节假日（本地时间），只看「种下」那一刻在不在窗口内。2026 国庆假期 10/1 ~ 10/7 按周末加成计算。反推时自动判断并计入周末 +5%——同一个目标时刻，时长越长越容易"够不着周末"：例如目标周五 10:00 半熟，15分/60分植物可在周五当天种下、吃得到 +5%，而 16 小时植物要周四就种下，自动按无周末加成重算并提示「吃不到周末加成」。<br>
+    <b>周末判定</b>：周末窗口 = 周五 00:00 ~ 周一 00:00 ＋ 节假日（本地时间），只看「种下」那一刻在不在窗口内。2026 国庆假期 10/1 ~ 10/7 按周末加成计算；<b>反推时目标半熟时刻落在国庆假期内，直接计入周末 +5%</b>（种下时刻不必也在假期内）。平时反推自动判断并计入周末 +5%——同一个目标时刻，时长越长越容易"够不着周末"：例如目标周五 10:00 半熟，15分/60分植物可在周五当天种下、吃得到 +5%，而 16 小时植物要周四就种下，自动按无周末加成重算并提示「吃不到周末加成」。<br>
     <b>默认加成</b>：周五 / 周六 / 周日 / 节假日打开本页默认「仅周末」；周一 ~ 周四打开默认关闭周末加成（肥料仍默认 +30%），随时可手动改。
   </footer>
 </div>
@@ -683,10 +683,13 @@
       var backHtml = "";
       if (tgt) {
         var tgtInWk = isWeekendMoment(tgt);
+        var tgtHol = isHolidayMoment(tgt);   /* 国庆假期：目标半熟落在假期内，直接计入周末 +5% */
         var pWk = new Date(tgt.getTime() - Math.floor((B - HB) / (1 + WEEKEND + ft)) * 1000);
         var pNo = new Date(tgt.getTime() - Math.floor((B - HB) / (1 + ft)) * 1000);
         var backWkOn, plantBack;
-        if (isWeekendMoment(pWk)) {
+        if (tgtHol) {
+          backWkOn = true;  plantBack = pWk;
+        } else if (isWeekendMoment(pWk)) {
           backWkOn = true;  plantBack = pWk;
         } else if (!isWeekendMoment(pNo)) {
           backWkOn = false; plantBack = pNo;
@@ -709,7 +712,7 @@
               '<span class="badge ' + bonusClass(backWkOn, ft) + '">' + bonusText(backWkOn, ft) + ' ×' + backSpeed.toFixed(2) + '</span></div>' +
             '<div class="sched-row"><span class="ic">' + S.sprout + '</span>开始种<b>' + fmtClock(plantBack) + '</b><span class="tiny">' + warn + '</span></div>' +
             '<div class="sched-row"><span class="ic">' + S.sun + '</span>届时<b>' + fmtClock(mature) + '</b>成熟<span class="tiny">目标半熟后 ' + fmtShort((mature - tgt) / 1000) + '</span></div>' +
-            '<div class="sched-row"><span class="tiny" style="margin-left:0">目标时刻 ' + (tgtInWk ? '在周末内' : '不在周末内') + '（' + DAY_NAMES[tgt.getDay()] + '）｜ 周末加成按种下时刻自动判断</span></div>' +
+            '<div class="sched-row"><span class="tiny" style="margin-left:0">目标时刻 ' + (tgtInWk ? '在周末内' : '不在周末内') + '（' + DAY_NAMES[tgt.getDay()] + '）｜ ' + (tgtHol ? '国庆假期内，周末 +5% 直接计入' : '周末加成按种下时刻自动判断') + '</span></div>' +
             backNote +
           '</section>';
       }
